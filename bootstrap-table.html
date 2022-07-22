@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style type="text/less">
+    table {
+      width: 600px;
+      height: 200px;
+      border-collapse: collapse;
+      padding: 0.5em;
+      margin: 0 auto;
+    }
+    tr {
+        border-bottom: 1px solid grey;
+      }
+
+
+    .table tr:nth-child(1)>td {
+      color: black;
+      font-weight: bold;
+    }
+
+     tr td:nth-child(1) {
+      color: black;
+      font-weight: bold;
+    }
+
+    .table-sm tr td {
+       padding: 0 0.5em .5em 0;
+      }
+
+    .table-striped tr:nth-child(2n) {
+      background-color: #f2f2f2;
+      }
+
+    .table-hover tr:nth-child(n+2):hover {
+      background-color: #f2f2f2;
+    }
+
+    .table-bordered {
+      border: 2px solid #0d6efd
+    }
+    .table-bordered tr {
+      border: 2px solid #0d6efd
+    }
+    .table-bordered tr td {
+      border: 2px solid #0d6efd
+    }
+
+    .table-borderless tr {
+      border: none;
+    }
+
+    .table-dark {
+      background-color: #212529;
+    }
+    .table-dark tr td:nth-child(n){
+      color: #ffffff;
+    }
+
+
+
+
+
+
+
+  </style>
+</head>
+
+<body>
+  <table class="table">
+    <tr>
+      <td>#</td>
+      <td>First</td>
+      <td>Last</td>
+      <td>Handle</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Larry the Bird</td>
+      <td></td>
+      <td>@twitter</td>
+    </tr>
+  </table>
+
+</body>
+<script src="less@4.js"></script>
+
+</html>
