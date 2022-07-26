@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* * {
+      background-color: rgba(0, 0, 0, 0.08);
+      box-shadow: inset 0 0 1px red;
+    } */
+
+    body {
+      margin: 0;
+
+    }
+
+    main {
+      width: 300px;
+      margin: auto;
+      padding: 50px;
+    }
+
+    .position {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      background-color: red;
+
+    }
+
+    .position div {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      left: 50%;
+      top: 50%;
+      margin-left: -50px;
+      margin-top: -50px;
+      background-color: green;
+    }
+
+    .flex {
+      display: flex;
+      margin-top: 30px;
+      width: 200px;
+      height: 200px;
+      background-color: antiquewhite;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .flex div {
+      width: 100px;
+      height: 100px;
+      background-color: azure;
+    }
+
+    .transform {
+      position: relative;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      width: 200px;
+      height: 200px;
+      background-color: aqua;
+    }
+
+    .transform div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      background-color: brown;
+    }
+
+    .table-cell {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      background-color: burlywood;
+      width: 200px;
+      height: 200px;
+    }
+
+    .table-cell div {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      background-color: aqua;
+    }
+
+    .a {
+      margin-top: 30px;
+      background-color: burlywood;
+      width: 200px;
+      height: 200px;
+      border: 1px solid black;
+    }
+
+    .a div {
+      width: 100px;
+      height: 100px;
+      background-color: beige;
+      margin: 50px;
+      border: 1px solid black;
+    }
+  </style>
+
+</head>
+
+<body>
+  <main>
+    <section class="position">
+      绝对定位＋负margin
+      <div>
+
+      </div>
+    </section>
+
+    <section class="flex">
+
+      <div>
+        flex
+      </div>
+    </section>
+
+    <section class="transform">
+      transform
+      <div>
+
+      </div>
+    </section>
+
+    <section class="table-cell">
+      display:table-cell
+      <div>
+
+      </div>
+    </section>
+
+    <section class="a">
+
+      <div>
+        纯margin计算父子距离
+      </div>
+    </section>
+
+  </main>
+
+
+</body>
+
+</html>
