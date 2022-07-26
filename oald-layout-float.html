@@ -13,6 +13,7 @@
     }
 
     body {
+      min-width: 1000px;
       height: 100vh;
     }
 
@@ -49,10 +50,25 @@
 
     aside ul {
       margin-top: 40px;
-      height: 85vh;
+      height: calc(100% - 95px);
       list-style: none;
       overflow: auto;
       text-align: center;
+    }
+
+
+    .c {
+      float: right;
+      width: 200px;
+      height: 100vh;
+      background-color: greenyellow;
+    }
+
+    .b {
+      float: right;
+      width: 200px;
+      height: 100vh;
+      background-color: red;
     }
 
     .a {
@@ -63,20 +79,6 @@
       overflow: auto;
       background-color: pink;
       overflow: auto;
-    }
-
-    .b {
-      float: right;
-      width: 200px;
-      height: 100vh;
-      background-color: red;
-    }
-
-    .c {
-      float: right;
-      width: 200px;
-      height: 100vh;
-      background-color: greenyellow;
     }
   </style>
 </head>
