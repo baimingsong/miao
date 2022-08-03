@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @keyframes aaa {
+      0% {
+        transform: rotateY(90deg);
+      }
+
+      20% {
+        transform: rotateY(180deg);
+      }
+
+      40% {
+        transform: rotateY(270deg);
+      }
+
+      60% {
+        transform: rotateX(-90deg);
+      }
+
+      80% {
+        transform: rotateX(0);
+      }
+
+      100% {
+        transform: rotateX(90deg);
+      }
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    section {
+      width: 200px;
+      height: 200px;
+      transform-style: preserve-3d;
+      position: relative;
+      animation: aaa 5s linear infinite;
+    }
+
+    section div {
+      width: 200px;
+      height: 200px;
+      position: absolute;
+
+    }
+
+    .item-front {
+      background: linear-gradient(blue, pink);
+      transform: translateZ(100px);
+    }
+
+    .item-back {
+      background: linear-gradient(red, yellow, blue, orange);
+      transform: rotateY(180deg) translateZ(100px);
+    }
+
+
+    .item-left {
+      background: linear-gradient(blue, green, aqua, pink);
+      transform: rotateY(-90deg) translateZ(100px);
+    }
+
+    .item-right {
+      background: linear-gradient(blue, red, green);
+      transform: rotateY(90deg) translateZ(100px);
+    }
+
+    .item-top {
+      background: linear-gradient(red, blue, pink);
+      transform: rotateX(90deg) translateZ(100px);
+    }
+
+    .item-bottom {
+      background: linear-gradient(blue, pink, red);
+      transform: rotateX(-90deg) translateZ(100px);
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <div class="item-front">
+    </div>
+    <div class="item-back">
+    </div>
+    <div class="item-left">
+    </div>
+    <div class="item-right">
+    </div>
+    <div class="item-top">
+    </div>
+    <div class="item-bottom">
+    </div>
+
+  </section>
+
+</body>
+
+</html>
