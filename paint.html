@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>画图</title>
+  <style>
+    canvas {
+      border: 2px solid #f0f;
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas width="500" height="400"></canvas>
+</body>
+<script>
+  var canvas = document.querySelector('canvas')
+  canvas.style.imageRendering = 'pixelated' //放大时的插帧方式：不插帧，直接放大像素
+  var ctx = canvas.getContext('2d')
+
+  function dot(x, y, color = 'black') {
+    x = Math.round(x)
+    y = Math.round(y)
+    ctx.fillStyle = color
+    ctx.fillRect(x, y, 1, 1)
+  }
+  /**
+   * YOUR TASK
+      * 在 坐标 (42, 42) 画出一个点
+      * 画一条实线
+      * 画一条一个实点一个空点的虚线
+      * 画一条两个实点两个空点的虚线
+      * 画一条三个实点两个空点的虚线
+      * 画一条45度的斜线
+      * 画一条30度的斜线（与x轴或y轴的夹角呈30度）
+      * 画一条跨越画布左上角和右下角的对角线
+      * 画一个空心矩形
+      * 画一个实心矩形
+      * 画两个个空心的圆，居中：
+        * 一个半径为50像素
+        * 一个半径为200像素
+      * 画一个实心的圆，半径至少为100像素
+      * 画一个【大小合适】的sin(x)的图像
+
+      * 画出rgb色彩空间的某一面（尺寸要大于100x100）
+         'rgb(255,255,0)'
+         '#ff00ff'
+        如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变幻后的色彩空间某一面
+        可以考虑如下几种矩阵：
+           2 0
+           0 2
+           ------
+           1  0.27
+           0  1
+           ------
+           0.5    0.87
+           -0.87  0.5
+
+   */
+</script>
+<script>
+  // 不可更改上面的代码
+  // 你的代码写在这里
+  // YOUR CODE GOES BELOW
+  //点
+  dot(42, 42);
+  //一条实线
+  for (var i = 1; i <= 400; i++) {
+    dot(45 + i, 45, 'green')
+  }
+  //一条一个实点一个空点的虚线
+  for (var x = 60; x <= 400; x += 2) {
+    dot(x, 60);
+  }
+  //一条两个实点两个空点的虚线
+  for (var x = 60; x <= 400; x += 4) {
+    dot(x, 70);
+    dot(x + 1, 70);
+  }
+  //一条三个实点两个空点的虚线
+  for (var x = 60; x <= 400; x += 5) {
+    var y = 80;
+    dot(x, 80);
+    dot(x + 1, 80);
+    dot(x + 2, 80);
+  }
+  //画一条45度的斜线
+  for (var i = 1; i <= 400; i++) {
+    dot(i, i, 'red')
+  }
+  //画一条30度的斜线（与x轴或y轴的夹角呈30度）,
+  //此处与y轴夹角呈30度
+  for (var i = 1; i <= 400; i++) {
+    dot(i, i * Math.sqrt(3), 'blue')
+  }
+  //画一条跨越画布左上角和右下角的对角线
+  for (var i = 1; i <= Math.sqrt(400 ** 2 + 500 ** 2); i++) {
+    dot(i, i * 4 / 5, 'aqua')
+  }
+  //画一个空心矩形
+  for (var i = 1; i <= 80; i++) {
+    dot(200 + i, 100, 'red')
+    dot(200 + i, 200, 'red')
+  }
+  for (var j = 1; j <= 100; j++) {
+    dot(200, 100 + j, 'red')
+    dot(280, 100 + j, 'red')
+  }
+  //画一个实心矩形
+  for (var i = 0; i < 100; i++) {
+    for (var j = 0; j < 80; j++) {
+      dot(300 + j, 100 + i);
+    }
+  }
+  // 画两个个空心的圆，居中：
+  //   * 一个半径为50像素
+  function paintCircle(radius, x0, y0) {
+    for (var i = 0; i <= radius * 2; i += 0.01) {
+      dot(x0 - radius + i, Math.sqrt(radius ** 2 - Math.pow(x0 - radius + i - x0, 2)) + y0);
+      dot(x0 - radius + i, y0 - Math.sqrt(radius ** 2 - Math.pow(x0 - radius + i - x0, 2)));
+    }
+  }
+
+  paintCircle(50, 500 / 2, 400 / 2);
+
+  //  * 一个半径为200像素
+  paintCircle(200, 500 / 2, 400 / 2);
+
+
+  // 半径为100px的实心圆
+  for (var j = 0; j < 100; j += 1) {
+    paintCircle(j, 400, 300);
+    dot(400 + j, 300);
+
+  }
+
+  // sin(x)图像
+  var x_sin = 60;
+  var y_sin = 300;
+  for (var i = 0; i < 50; i += 0.1) {
+    dot((x_sin + i), y_sin - Math.sin(x_sin + i))
+  }
+</script>
+
+</html>
