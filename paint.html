@@ -129,19 +129,58 @@
   //  * 一个半径为200像素
   paintCircle(200, 500 / 2, 400 / 2);
 
-
   // 半径为100px的实心圆
   for (var j = 0; j < 100; j += 1) {
     paintCircle(j, 400, 300);
     dot(400 + j, 300);
-
   }
-
   // sin(x)图像
   var x_sin = 60;
   var y_sin = 300;
   for (var i = 0; i < 50; i += 0.1) {
-    dot((x_sin + i), y_sin - Math.sin(x_sin + i))
+    dot(2 * (x_sin + i), y_sin - 10 * Math.sin(x_sin + i))
+  }
+</script>
+
+
+<script>
+  // 画出rgb色彩空间的某一面（尺寸要大于100x100）
+  for (var y = 70; y < 256; y++) {
+    for (var x = 70; x < 256; x++) {
+      var color = 'rgb(' + x + ',0,' + y + ')'
+      console.log(color)
+      dot(x / 2, y / 2 + 200, color)
+    }
+  }
+</script>
+<script>
+  //考虑如下几种矩阵：
+  // 2 0
+  // 0 2
+  // ------
+  // 1  0.27
+  // 0  1
+  // ------
+
+  for (var y = 0; y < 100; y++) {
+    for (var x = 0; x < 100; x++) {
+      var color = 'rgb(' + x + ',0,' + y + ')'
+      console.log(color)
+      var xx = x
+      var yy = y + 0.27 * x
+      dot(xx, yy, color)
+    }
+  }
+  //   0.5    0.87
+  //   -0.87  0.5
+  for (var y = 0; y < 100; y++) {
+    for (var x = 0; x < 100; x++) {
+      var color = 'rgb(' + x + ',255,' + y + ')'
+      console.log(color)
+      var xx = 0.5 * x - 0.87 * y
+      var yy = 0.87 * x + 0.5 * y
+      dot(xx, yy, color)
+    }
   }
 </script>
 

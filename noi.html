@@ -337,12 +337,15 @@
     } else if (c == '*') {
       console.log(a * b)
     } else if (c == '/') {
-      console.log(a / b)
-    } else if (b == 0) {
-      console.log('Divided by zero!')
+      if (b == 0) {
+        console.log('Divided by zero!')
+      } else {
+        console.log(a / b)
+      }
     } else {
       console.log('Invalid operator!')
     }
+
   </script>
   <script id="ch0104/20">
     var a = prompt()
@@ -614,22 +617,21 @@
     }
   }
 </script>
-  <script type="x" id="ch0105/19">
-  var n = prompt()
-  var time1 = 0
-  var time2 = 0
-  for (var i = 1; i <= n; i++) {
-    var x = Number(prompt())
-    var y = Number(prompt())
-    var num = Number(prompt())
-    var distance = Math.sqrt(x * x + y * y)
-    time1 = time1 + 2 * (distance / 50)
-    time2 = time2 + num * 1.5
-  }
-  var result1 = Math.ceil(time2)
-  var result = time1 + result1
-  console.log(result)
-</script>
+  <script id="ch0105/19">
+    var n = prompt()
+    var time1 = 0
+    var time2 = 0
+    for (var i = 1; i <= n; i++) {
+      var x = Number(prompt())
+      var y = Number(prompt())
+      var num = Number(prompt())
+      var distance = Math.sqrt(x * x + y * y)
+      time1 = time1 + 2 * (distance / 50)
+      time2 = time2 + num * 1.5
+    }
+    var result = time1 + time2
+    console.log(Math.ceil(result))
+  </script>
   <script type="x" id="ch0105/20">
   var h = Number(prompt())
   var sum = 0
@@ -693,7 +695,7 @@
     }
   }
 </script>
-  <script type="" id="ch0105/23">
+  <script type="x" type="" id="ch0105/23">
   var m = prompt()
   var n = prompt()
   var number = []
@@ -728,8 +730,24 @@
 
 
   </script>
-  <script id="ch0105/25">
+  <script type="x" id="ch0105/25">
+    // 81到342之间的数转换成7进制与9进制才都是3位数
+    for (var x = 81; x <= 342; x++) {
+      var a7 = x % 7 // 7进制个位数
+      var b7 = (x - a7) / 7 % 7 // 7进制右数第二位数
+      var c7 = (x - a7 - b7 * 7) / 7 / 7 % 7 // 7进制右数第三位数
 
+      var a9 = x % 9 // 9进制个位数
+      var b9 = (x - a9) / 9 % 9 // 9进制右数第二位数
+      var c9 = (x - a9 - b9 * 9) / 9 / 9 % 9 // 9进制右数第三位数
+
+      if (a7 == c9 && a9 == c7 && b7 == b9) {
+        console.log(x)
+        console.log('' + c7 + b7 + a7)
+        console.log('' + c9 + b9 + a9)
+        break
+      }
+    }
   </script>
   <script type="x" id="ch0105/26">
     var n = prompt()
@@ -759,15 +777,40 @@
     }
   </script>
   <script type="x" id="ch0105/28">
-    var num = prompt()
-    var x = num.length;
-    for (var i = 1; i <= x; i++) {
-      console.log(num.charAt(x - i));
-    }
+    //  var num = prompt()
+    // var x = num.length;
+    // for (var i = 1; i <= x; i++) {
+    //   console.log(num.charAt(x - i));
+    // }
+    var n = Number(prompt())
+    do {
+      var d = n % 10
+      console.log(d)
+      n = n - d
+      n = n / 10
+    } while (n > 0)
   </script>
   <script id="ch0105/29">
-    var N = prompt()
+    var n = Number(prompt())
+    var sign = 1
+    if (n < 0) { // 如果n小于0，把n转成正数，并记录符号
+      n = -n
+      sign = -1
+    }
+    var str = ''
+    do {
+      var d = n % 10
+      str = str + d
+      n = n - d
+      n = n / 10
 
+    } while (n > 0)
+    str = parseInt(str, 10)
+    if (sign == 1) {
+      console.log(str)
+    } else {
+      console.log(-str)
+    }
   </script>
   <script type="x" id="ch0105/30">
     var m = prompt()
@@ -784,27 +827,33 @@
       console.log('NO')
     }
   </script>
-  <script type="x" id="ch0105/31">
-    var n = Number(prompt())//灯
-    var m = Number(prompt())//人
-    var lights = []
-    var false_light = []
-    for (var i = 0; i < n; i++) {
-      lights[i] = false;
-    }//第一个人1号将灯全部关闭
-    for (var i = 2; i <= m; i++) {
-      for (var j = 1; j <= n; j++) {
-        if (j % i == 0) {
-          lights[j - 1] = !lights[j - 1]
+  <script id="ch0105/31">
+    var n = Number(prompt()) // 灯的数量
+    var m = Number(prompt()) // 人的数量
+    var result = ''
+    var 是否遇到了第一个关着的灯 = false
+    // 遍历每一个灯
+    for (var i = 1; i <= n; i++) {
+      var open = true // 这个灯一开始是打开状态
+      // 遍历每个小于灯的编号的人,因为灯的编号要是人的编号的倍数才有可能进if
+      for (var j = 1; j <= m && j <= i; j++) {
+        // 如果灯的编号是人的编号的倍数
+        if (i % j == 0) {
+          open = !open // 则切换灯的状态
+        }
+      }
+
+      if (!open) { // 如果这个灯是关的着
+
+        if (!是否遇到了第一个关着的灯) {
+          是否遇到了第一个关着的灯 = true
+          result += (i)
+        } else {
+          result += (',' + i)
         }
       }
     }
-    for (var i = 0; i < n; i++) {
-      if (!lights[i]) {
-        false_light.push(i + 1);
-      }
-    }
-    console.log(false_light.join(","));
+    console.log(result)
   </script>
   <script type="x" id="ch0105/32">
     var n = Number(prompt())
@@ -813,10 +862,9 @@
     var p = 1
     for (var i = 1; i <= n; i++) {
       sn = sn + q / p
-      var later_q = q
-      var later_p = p //定义变量容易表示
-      q = later_q + later_p
-      p = later_q
+      var c = p + q
+      p = q
+      q = c
     }
     console.log((sn).toFixed(4))
   </script>
@@ -828,16 +876,21 @@
     }
     console.log((sum).toFixed(4))
   </script>
-  <script type="x" id="ch0105/34">
+  <script id="ch0105/34">
+
     var n = Number(prompt())
     var jie = 1
     var sum = 0
+    // for (var i = 1; i <= n; i++) {
+    //   for (var j = 1; j <= i; j++) {
+    //     jie = jie * j //在每个确定值的时候的阶乘
+    //   }
+    //   sum = sum + jie
+    //   jie = 1
+    // }
     for (var i = 1; i <= n; i++) {
-      for (var j = 1; j <= i; j++) {
-        jie = jie * j //在每个确定值的时候的阶乘
-      }
+      jie = jie * i
       sum = sum + jie
-      jie = 1
     }
     console.log(sum)
   </script>
@@ -879,22 +932,24 @@
     console.log(N)
   </script>
   <script id="ch0105/38">
-    // var n = Number(prompt());
-    // for (var k = 1; k <= n; k++) {
-    //   var m = Number(prompt());
-    //   var link = [];
-    //   for (var i = 1; i <= m + 1; i++) {
-    //     var temp = Number(prompt());
-    //     link.push(temp);
-    //   }
-    //   if (link.length === 1) {
-    //     console.log(0);
-    //   } else {
-    //     for (var i = link.length; i >= 2; i--) {
-    //       console.log(link[link.length - i] * (i - 1));
-    //     }
-    //   }
-    // }
+    var n = Number(prompt())
+    for (var i = 1; i <= n; i++) {
+      var m = Number(prompt()) // 最高次幂
+      var M = m // 保存最高次幂
+      if (m == 0) { // 最高次幂为0时是特殊情况,因为也要输出1个数
+        var c = Number(prompt())
+        console.log(0)
+      } else {// 其它情况最高次幂是n,输出n-1个数
+        for (var j = 0; j <= M; j++) {
+          var c = Number(prompt())
+          if (j !== M) {
+            console.log(c * m)
+          }
+          m--
+        }
+      }
+    }
+
   </script>
   <script type="x" id="ch0105/39">
     var n = Number(prompt())
@@ -970,7 +1025,6 @@
     var flag = 0;
     var primes = [];
     var target = 2;
-
     while (flag <= n) {
       for (var i = 2; i <= Math.ceil(Math.sqrt(target)); i++) {
         if (i !== target && target % i === 0) {
@@ -1022,7 +1076,164 @@
   </script>
 
 
+  <script id="narcissistic">
+    var n = Number(prompt())
+    var ge = n % 10
+    var shi = (n - n % 10) / 10 % 10
+    var bai = (n - n % 100) / 100
+    var a = Math.pow(ge, 3)
+    var b = Math.pow(shi, 3)
+    var c = Math.pow(bai, 3)
+    var result = a + b + c
+    if (n === result) {
+      console.log('YES')
+    } else {
+      console.log('NO')
+    }
+  </script>
+  <script id="narcissistics">
+    for (var i = 100; i < 1000; i++) {
+      var ge = i % 10
+      var shi = (i - i % 10) / 10 % 10
+      var bai = (i - i % 100) / 100
+      var a = Math.pow(ge, 3)
+      var b = Math.pow(shi, 3)
+      var c = Math.pow(bai, 3)
+      var result = a + b + c
+      if (i === result) {
+        console.log(i)
+      }
+    }
 
+  </script>
+  <script id="palindrom">
+    var n = prompt()
+    var a = n.length
+    var count = 0
+    if (a % 2 === 0) {
+      for (var i = 0; i < a; i++) {
+        if (n[i] = n[a - i]) {
+          count = count + 1
+        }
+      }
+    }
+    if (a % 2 !== 0) {
+      for (var i = 0; i < a; i++) {
+        if (n[i] = n[a - i - 1]) {
+          count = count + 1
+        }
+      }
+    }
+    if (count === a) {
+      console.log('YES')
+    } else {
+      console.log('NO')
+    }
+  </script>
+  <script id="weekday">
+    var year = prompt()
+    var m = prompt()
+    var d = 1
+    var c = (year - year % 100) / 100
+    var y = year % 100
+    //w：星期；c：世纪-1；y：年（两位数）；m：月（m大于等于3，
+    //小于等于14，即在蔡勒公式中，某年的1、2月要看作上一年的13、14月来计算，
+    //比如2003年1月1日要看作2002年的13月1日来计算）；d：日；[ ]代表取整，即只要整数部分。(C是世纪数减一，y是年份后两位，M是月份，d是日数。
+    //1月和2月要按上一年的13月和 14月来算，这时C和y均按上一年取值。)
+    //蔡勒（Zeller）公式：w=y+[y/4]+[c/4]-2c+[26(m+1)/10]+d-1
+    var w = y + Math.floor(y / 4) + Math.floor(c / 4) - 2 * c + Math.floor(26 * (m + 1) / 10) + d - 1
+    var result = w % 7
+    console.log(result)
+
+
+  </script>
+  <script id="complete-number">
+    var n = Number(prompt())
+    var sum = 0
+    for (i = 2; i <= n; i++) {
+      sum = 0 //保证每次循环时sum的初值为0,
+      for (j = 1; j < i; j++) {//判断j是否为i的因子，不包括本身
+        if (i % j == 0)
+          sum += j
+      }
+    }
+    // 判断因子和是否和原数相等
+    if (sum == n) {
+      console.log('YES')
+    } else {
+      console.log('NO')
+    }
+  </script>
+
+  <script id="complete-numbers">
+    var sum = 0
+    for (i = 2; i <= 500; i++) {
+      sum = 0 //保证每次循环时sum的初值为0,
+      for (j = 1; j < i; j++) {//判断j是否为i的因子，不包括本身
+        if (i % j == 0)
+          sum += j
+      }
+      if (sum == i) {
+        console.log(i)
+      }
+    }
+    // 判断因子和是否和原数相等
+  </script>
+  <script id="prime">
+    var n = Number(prompt())
+    for (var i = 2; i < n; i++) {
+      if (n % i == 0) {
+        break
+      }
+    }
+    if (i < n) {
+      console.log('NO')
+    } else if (n == 1) {
+      console.log('NO')
+    } else {
+      console.log('YES')
+    }
+  </script>
+  <script id="primes">
+    for (var i = 2; i < 100; i++) {
+      flag = true
+      for (var j = 2; j < i / 2; j++) {
+        if (i % j == 0) {
+          flag = false
+        }
+      }
+      if (i != 4 && flag == true) {
+        console.log(i)
+      }
+    }
+  </script>
+  <script id="itob">
+    var n = Number(prompt())
+    var result = '' + n
+    console.log(result)
+  </script>
+  <script id="lcf&lcm">
+    var m = Number(prompt())
+    var n = Number(prompt())
+    var a = Math.min(m, n)
+    var b = Math.max(m, n)
+    var factor = 1
+    var product = 1
+    var c = 0
+    for (var i = 2; i <= a; i++) {
+      if (m % i == 0 && n % i == 0) {
+        factor = factor * i
+      }
+      product = factor * (a / factor) * (b / factor)
+    }
+    console.log(factor)
+    console.log(product)
+  </script>
+  <script id="sqrt">
+    var n = Number(prompt())
+    var result = Math.sqrt(n)
+    console.log(result.toFixed(3))
+  </script>
 
 </head>
 
