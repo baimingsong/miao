@@ -1132,18 +1132,84 @@
   </script>
   <script id="weekday">
     var year = prompt()
-    var m = prompt()
-    var d = 1
-    var c = (year - year % 100) / 100
-    var y = year % 100
-    //w：星期；c：世纪-1；y：年（两位数）；m：月（m大于等于3，
-    //小于等于14，即在蔡勒公式中，某年的1、2月要看作上一年的13、14月来计算，
-    //比如2003年1月1日要看作2002年的13月1日来计算）；d：日；[ ]代表取整，即只要整数部分。(C是世纪数减一，y是年份后两位，M是月份，d是日数。
-    //1月和2月要按上一年的13月和 14月来算，这时C和y均按上一年取值。)
-    //蔡勒（Zeller）公式：w=y+[y/4]+[c/4]-2c+[26(m+1)/10]+d-1
-    var w = y + Math.floor(y / 4) + Math.floor(c / 4) - 2 * c + Math.floor(26 * (m + 1) / 10) + d - 1
-    var result = w % 7
-    console.log(result)
+    var month = prompt()
+    function isLeapYear(year) {
+      if (year % 400 == 0) {
+        return true
+      }
+      if (year % 100 == 0) {
+        return false
+      }
+      if (year % 4 == 0) {
+        return true
+      }
+      return false
+    }
+
+    // 获取某年某月有多少天
+    function getMonthDay(year, month) {
+      switch (month) {
+        case 2:
+          if (isLeapYear(year)) {
+            return 29
+          } else {
+            return 28
+          }
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+          return 31
+        default:
+          return 30
+      }
+    }
+
+    function weekday(year, month) {
+      var days = 0
+      for (var y = 1; y < year; y++) {
+        if (!isLeapYear(y)) {
+          days += 365
+        } else {
+          days += 366
+        }
+      }
+      for (var m = 1; m < month; m++) {
+        if (m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12) {
+          days += 31
+        } else {
+          if (m == 2) {
+            if (isLeapYear(y)) {
+              days += 29
+            } else {
+              days += 28
+            }
+          } else {
+            days += 30
+          }
+        }
+      }
+      days++ // 加上当月的第一天
+      // return (days + 1) % 7
+      console.log(days % 7)
+    }
+    weekday(year, month)
+
+    //TWO
+    // function weekday(year, month) {
+    //   var y = year - 1
+    //   var days = y * 365 + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400)
+    //   for (var m = 1; m < month; m++) {
+    //     days += getMonthDay(year, m)
+    //   }
+    //   days++ // 加上当月的第一天
+    //   // return days % 7
+    //   console.log(days % 7)
+    // }
+    // weekday(year, month)
 
 
   </script>
@@ -1211,28 +1277,104 @@
     var n = Number(prompt())
     var result = '' + n
     console.log(result)
+    // function numberToChar(ge) {
+    //   var c = ''
+    //   if (ge == 0) {
+    //     c = '0'
+    //   }
+    //   if (ge == 1) {
+    //     c = '1'
+    //   }
+    //   if (ge == 2) {
+    //     c = '2'
+    //   }
+    //   if (ge == 3) {
+    //     c = '3'
+    //   }
+    //   if (ge == 4) {
+    //     c = '4'
+    //   }
+    //   if (ge == 5) {
+    //     c = '5'
+    //   }
+    //   if (ge == 6) {
+    //     c = '6'
+    //   }
+    //   if (ge == 7) {
+    //     c = '7'
+    //   }
+    //   if (ge == 8) {
+    //     c = '8'
+    //   }
+    //   if (ge == 9) {
+    //     c = '9'
+    //   }
+    //   return c
+    // }
+    // function itob(n) {
+    //   var str = ''
+    //   do {
+    //     var ge = n % 10
+    //     str = numberToChar(ge) + str
+    //     n = (n - ge) / 10
+    //   } while (n > 0)
+    //   return str
+    //   var str = ''
+    //   n = -n
+    //   do {
+    //     var ge = n % 10
+    //     str = numberToChar(ge) + str
+    //     n = (n - ge) / 10
+    //   } while (n < 0)
+    //   return str
+    // }
   </script>
   <script id="lcf&lcm">
-    var m = Number(prompt())
-    var n = Number(prompt())
-    var a = Math.min(m, n)
-    var b = Math.max(m, n)
-    var factor = 1
-    var product = 1
-    var c = 0
-    for (var i = 2; i <= a; i++) {
-      if (m % i == 0 && n % i == 0) {
-        factor = factor * i
-      }
-      product = factor * (a / factor) * (b / factor)
+    var m = prompt()
+    var n = prompt()
+    function littlestCommonMultiple(m, n) {
+      return (m * n / largestCommonFactor(m, n))
     }
-    console.log(factor)
-    console.log(product)
+    // 最大公约数
+    function largestCommonFactor(m, n) {
+      var min = m > n ? n : m
+      // 从较小的数开始向下尝试
+      // 如果遇到任何一个能同时被m和n整除的数，则就是答案
+      for (var x = min; x >= 1; x--) {
+        if (m % x == 0 && n % x == 0) {
+          return x
+        }
+      }
+    }
+    console.log(largestCommonFactor(m, n));
+    console.log(littlestCommonMultiple(m, n));
   </script>
   <script id="sqrt">
     var n = Number(prompt())
-    var result = Math.sqrt(n)
-    console.log(result.toFixed(3))
+    // var result = Math.sqrt(n)
+    // console.log(result.toFixed(3))
+    // 二分法
+    // 设置一个上下限，然后每次排除一半的可能性
+    // 一路向结果逼近
+    function sqrt(n) {
+      var low = 0
+      var high = Math.max(n, 2)
+      while (high - low > 0.000000001) {
+        var middle = (low + high) / 2
+        // 如果middle大于根号n,说明根号n在0到middle之间
+        if (middle * middle > n) {
+          high = middle
+          // 如果middle小于根号n,说明根号n在middle到high之间
+        } else if (middle * middle < n) {
+          low = middle
+        } else if (middle * middle == n) {
+          return middle
+        }
+      }
+      // return
+      console.log(((high + low) / 2).toFixed(3))
+    }
+    sqrt(n);
   </script>
 
 </head>
