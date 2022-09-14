@@ -28,20 +28,12 @@ var baimingsong = {
     return result
   },
 
-  difference: function difference(ary, values) {
+  difference: function difference(ary, ...values) {
     var result = []
+    values = values.flat()
     for (var i = 0; i < ary.length; i++) {
       if (!(values.includes(ary[i]))) {
         result.push(ary[i])
-      }
-      if (typeof (ary[i]) == Object) {
-        var temp = ary[i]
-        if (temp.val !== values[i].val) {
-          if (values[i].val == undefined) {
-            break
-          }
-          result.push(temp)
-        }
       }
     }
     return result
@@ -51,7 +43,7 @@ var baimingsong = {
     var result = []
     var ary1 = ary
     if (typeof (iteratee) == 'string') {
-      return difference(ary, values)
+      return this.difference(ary, values)
     }
     for (var i = 0; i < ary1.length; i++) {
       ary1[i] = iteratee(ary1[i])
@@ -60,7 +52,7 @@ var baimingsong = {
     for (var i = 0; i < values.length; i++) {
       values[i] = iteratee(values[i])
     }
-    var a = difference(ary1, values)
+    var a = this.difference(ary1, values)
     for (var j = 0; j < ary.length; j++) {
       if (a.includes(iteratee(ary[j])))
         result.push(ary[j])
@@ -84,6 +76,9 @@ var baimingsong = {
     }
     if (n >= ary.length) {
       return []
+    }
+    if (n == undefined) {
+      return ary.slice(1, ary.length)
     }
     return ary.slice(n, ary.length)
   },
@@ -129,9 +124,9 @@ var baimingsong = {
           } else {
             flag = false
           }
-          if (flag) {
-            return i
-          }
+        }
+        if (flag) {
+          return i
         }
       }
     }
@@ -151,6 +146,50 @@ var baimingsong = {
     }
     return -1
   },
+
+  findLastIndex: function findLastIndex() {
+
+  },
+
+  flatten: function flatten(ary) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (Array.isArray(ary[i])) {
+        var temp = ary[i]
+        for (var j = 0; j < temp.length; j++) {
+          result.push(temp[j])
+        }
+      }
+      result.push(ary[i])
+    }
+    return result
+  },
+
+  flattenDeep: function flattenDeep(ary) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (Array.isArray(ary[i])) {
+        result = result.concat(flattenDepth(ary[i]))
+      } else {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+
+  flattenDepth: function flattenDeep(ary, depth = 1) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (Array.isArray(ary[i]) && depth > 0) {
+        result = result.concat(flattenDepth(ary[i], depth - 1))
+      } else {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+  fromPairs:
+
 
 
 
