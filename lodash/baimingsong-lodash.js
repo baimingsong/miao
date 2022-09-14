@@ -188,7 +188,15 @@ var baimingsong = {
     }
     return result
   },
-  fromPairs:
+
+  fromPairs: function fromPairs(pairs) {
+    var obj = {}
+    for (var i = 0; i < pairs.length; i++) {
+      obj[pairs[i][0]] = pairs[i][1]
+    }
+    return obj
+  },
+
 
 
 
