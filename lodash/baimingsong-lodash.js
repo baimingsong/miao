@@ -105,47 +105,48 @@ var baimingsong = {
     return ary
   },
 
-  findIndex: function findIndex(ary, predicate = identity, fromIndex = ary.length - 1) {
+  findIndex: function findIndex(array, predicate = identity, fromIndex = 0) {
     if (Array.isArray(predicate)) {
-      for (var i = fromIndex; i >= 0; i--) {
-        for (var key in ary[i]) {
-          if (key === predicate[0] && ary[i][key] === predicate[1]) {
+      for (var i = fromIndex; i < array.length; i++) {
+        for (var key in array[i]) {
+          if (key === predicate[0] && array[i][key] === predicate[1]) {
             return i
           }
         }
       }
-    }
-    if (typeof predicate === Object) {
-      for (var i = fromIndex; i >= 0; i--) {
-        var flag = true
-        for (var key in predicate) {
-          if (key in ary[i] && predicate[key] === ary[i][key]) {
-            continue
-          } else {
-            flag = false
+      if (typeof predicate === Object) {
+        for (var i = fromIndex; i < array.length; i++) {
+          var flag = true
+          for (var key in predicate) {
+            if (key in array[i] && predicate[key] === array[i][key]) {
+              continue
+            }
+            else {
+              flag = false
+            }
+          }
+          if (flag) {
+            return i
           }
         }
-        if (flag) {
-          return i
+      }
+      if (typeof predicate === 'string') {
+        for (var i = fromIndex; i < array.length; i++) {
+          if (array[i][predicate] === true) return i
         }
       }
-    }
-    if (typeof predicate === 'string') {
-      for (var i = fromIndex; i >= 0; i--) {
-        if (ary[i][predicate] === true) {
-          return i
+      if (typeof predicate === 'function') {
+        for (var i = fromIndex; i < array.length; i++) {
+          if (predicate(array[i])) {
+            return i
+          }
         }
       }
+      return -1
     }
-    if (typeof predicate === 'function') {
-      for (var i = fromIndex; i >= 0; i--) {
-        if (predicate(ary[i])) {
-          return i
-        }
-      }
-    }
-    return -1
   },
+
+
 
   findLastIndex: function findLastIndex() {
 
@@ -155,29 +156,22 @@ var baimingsong = {
     var result = []
     for (var i = 0; i < ary.length; i++) {
       if (Array.isArray(ary[i])) {
-        var temp = ary[i]
-        for (var j = 0; j < temp.length; j++) {
-          result.push(temp[j])
+        for (var j = 0; j < (ary[i]).length; j++) {
+          result.push(ary[i][j])
         }
-      }
-      result.push(ary[i])
-    }
-    return result
-  },
-
-  flattenDeep: function flattenDeep(ary) {
-    var result = []
-    for (var i = 0; i < ary.length; i++) {
-      if (Array.isArray(ary[i])) {
-        result = result.concat(flattenDepth(ary[i]))
-      } else {
+      } else if (!(Array.isArray(ary[i]))) {
         result.push(ary[i])
       }
     }
     return result
+
   },
 
-  flattenDepth: function flattenDeep(ary, depth = 1) {
+  flattenDeep: function flattenDeep(ary) {
+    return this.flattenDepth(ary, Infinity)
+  },
+
+  flattenDepth: function flattenDepth(ary, depth = 1) {
     var result = []
     for (var i = 0; i < ary.length; i++) {
       if (Array.isArray(ary[i]) && depth > 0) {
@@ -196,6 +190,36 @@ var baimingsong = {
     }
     return obj
   },
+
+  head: function head(ary) {
+    if (ary.length == 0) {
+      return undefined
+    }
+    return ary[0]
+  },
+
+  indexOf: function indexOf(ary, value, fromIndex = 0) {
+    for (var i = fromIndex; i < ary.length; i++) {
+      if (ary[i] == value) {
+        return i
+      }
+    }
+    return -1
+  },
+
+
+  lastIndexOf: function lastIndexOf(ary, value, fromIndex = 0) {
+    for (var i = ary.length - fromIndex - 1; i >= 0; i--) {
+      if (ary[i] == value) {
+        return i
+      }
+    }
+    return -1
+  },
+
+  initial: function initial() {
+
+  }
 
 
 
