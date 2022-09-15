@@ -399,17 +399,17 @@ var baimingsong = {
   sortBy: function sortBy() {
 
   },
-  uniq: function uniq(ary) {
-    var result = []
-    var obj = {}
-    for (var i = 0; i < ary.length; i++) {
-      if (!(obj[ary[i]]) == undefined) {
-        obj(ary[i])++
-        result.push(ary[i])
-      }
-    }
-    return result
-  },
+  // uniq: function uniq(ary) {
+  //   var result = []
+  //   var obj = {}
+  //   for (var i = 0; i < ary.length; i++) {
+  //     if (!(obj[ary[i]]) == undefined) {
+  //       obj(ary[i])++
+  //       result.push(ary[i])
+  //     }
+  //   }
+  //   return result
+  // },
   sample: function sample() {
 
   },
