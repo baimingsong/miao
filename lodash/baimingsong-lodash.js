@@ -209,7 +209,7 @@ var baimingsong = {
     }
     return -1
   },
-  last: function last() {
+  last: function last(ary) {
     return ary[ary.length - 1]
   },
 
@@ -232,7 +232,7 @@ var baimingsong = {
   join: function join(ary, separator) {
     var result = ''
     for (var i = 0; i < ary.length - 1; i++) {
-      result = result + ary[i] + '~'
+      result = result + ary[i] + separator
     }
     result += ary[ary.length - 1]
     return result
