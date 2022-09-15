@@ -114,37 +114,40 @@ var baimingsong = {
           }
         }
       }
-      if (typeof predicate === Object) {
-        for (var i = fromIndex; i < array.length; i++) {
-          var flag = true
-          for (var key in predicate) {
-            if (key in array[i] && predicate[key] === array[i][key]) {
-              continue
-            }
-            else {
-              flag = false
-            }
-          }
-          if (flag) {
-            return i
-          }
-        }
-      }
-      if (typeof predicate === 'string') {
-        for (var i = fromIndex; i < array.length; i++) {
-          if (array[i][predicate] === true) return i
-        }
-      }
-      if (typeof predicate === 'function') {
-        for (var i = fromIndex; i < array.length; i++) {
-          if (predicate(array[i])) {
-            return i
-          }
-        }
-      }
-      return -1
     }
+    if (typeof predicate === 'object') {
+      for (var i = fromIndex; i < array.length; i++) {
+        var flag = true
+        for (var key in predicate) {
+          if (key in array[i] && predicate[key] === array[i][key]) {
+            continue
+          }
+          else {
+            flag = false
+          }
+        }
+        if (flag) {
+          return i
+        }
+      }
+    }
+    if (typeof predicate === 'string') {
+      for (var i = fromIndex; i < array.length; i++) {
+        if (array[i][predicate] === true) {
+          return i
+        }
+      }
+    }
+    if (typeof predicate === 'function') {
+      for (var i = fromIndex; i < array.length; i++) {
+        if (predicate(array[i])) {
+          return i
+        }
+      }
+    }
+    return -1
   },
+
 
 
 
@@ -206,10 +209,13 @@ var baimingsong = {
     }
     return -1
   },
+  last: function last() {
+    return ary[ary.length - 1]
+  },
 
 
-  lastIndexOf: function lastIndexOf(ary, value, fromIndex = 0) {
-    for (var i = ary.length - fromIndex - 1; i >= 0; i--) {
+  lastIndexOf: function lastIndexOf(ary, value, fromIndex = ary.length - 1) {
+    for (var i = fromIndex; i >= 0; i--) {
       if (ary[i] == value) {
         return i
       }
@@ -217,9 +223,148 @@ var baimingsong = {
     return -1
   },
 
-  initial: function initial() {
+  initial: function initial(ary) {
+    ary.pop()
+    return ary
 
-  }
+  },
+
+  join: function join(ary, separator) {
+    var result = ''
+    for (var i = 0; i < ary.length - 1; i++) {
+      result = result + ary[i] + '~'
+    }
+    result += ary[ary.length - 1]
+    return result
+  },
+
+
+  pull: function pull(ary, ...values) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (!(values.includes(ary[i]))) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+
+  reverse: function reverse(ary) {
+    var l = Math.floor(ary.length / 2)
+    for (var i = 0; i < l; i++) {
+      var temp = ary[i]
+      ary[i] = ary[ary.length - 1]
+      ary[ary.length - 1] = temp
+    }
+    return ary
+  },
+
+  every: function every(ary, predicate) {
+    for (var i = 0; i < ary.length; i++) {
+      if (predicate(ary[i], i, ary) == false) {
+        return false
+      }
+    }
+    return true
+  },
+  some: function some(ary, predicate) {
+    for (var i = 0; i < ary.length; i++) {
+      if (predicate(ary[i], i, ary) == true) {
+        return true
+      }
+
+    }
+    return false
+  },
+
+  countBy: function countBy(ary, iteratee) {
+    if (typeof iteratee == 'function') {
+      for (var i = 0; i < ary.length; i++) {
+        ary[i] = iteratee([ary[i]])
+
+      }
+      var obj = {}
+      for (var i = 0; i < ary.length; i++) {
+        if (obj[ary[i]] === undefined) {
+          obj[ary[i]] = 1
+        } else {
+          obj[ary[i]]++
+        }
+      }
+      return obj
+    }
+  },
+
+  groupBy: function groupBy() {
+
+  },
+  keyBy: function keyBy() {
+
+  },
+  forEach: function forEach(ary, action) {
+    for (var i = 0; i < ary.length; i++) {
+      action(ary[i])
+    }
+  },
+  map: function map(ary, transform) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      result.push(transform(ary[i]))
+    }
+    return result
+  },
+  filter: function filter(ary, predicate) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (predicate(ary[i])) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+  reduce: function reduce(ary, combine, start) {
+    var result = start
+    for (var i = 0; i < ary.length; i++) {
+      result = combine(result, ary[i])
+    }
+    return result
+  },
+  nth: function nth(ary, n) {
+    if (n >= 0) {
+      return ary[n]
+    } else {
+      return ary[ary.length + n]
+    }
+  },
+
+  sortedIndex: function sortedIndex(ary, value) {
+    for (var i = 0; i < ary.length; i++) {
+      if (ary[i] <= value && ary[i + 1] >= value) {
+        return i + 1
+      }
+    }
+  },
+
+  size: function size(collection) {
+    if (Array.isArray(collection)) {
+      return collection.length
+    }
+    if (typeof collection == 'string') {
+      collection = collection.split('')
+      return collection.length
+    }
+    if (typeof collection == 'object') {
+      var count = 0
+      for (var key in collection) {
+        if (collection[key] == undefined) {
+          break
+        }
+        count++
+      }
+      return count
+      // Object.keys(collection)
+    }
+  },
 
 
 
