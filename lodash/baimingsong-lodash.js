@@ -279,21 +279,20 @@ var baimingsong = {
   countBy: function countBy(ary, iteratee) {
     if (typeof iteratee == 'function') {
       for (var i = 0; i < ary.length; i++) {
-        ary[i] = iteratee([ary[i]])
-
+        var f = iteratee
       }
+
     }
     if (typeof iteratee === "string") {
-      ary[i] = ary.map(function (it) {
-        return it[iteratee]
-      })
+      var f = (it) => it[iteratee]
     }
     var obj = {}
     for (var i = 0; i < ary.length; i++) {
-      if (obj[ary[i]] === undefined) {
-        obj[ary[i]] = 1
+      temp = f(ary[i])
+      if (obj[temp] === undefined) {
+        obj[temp] = 1
       } else {
-        obj[ary[i]]++
+        obj[temp]++
       }
     }
     return obj
@@ -319,25 +318,9 @@ var baimingsong = {
     return result
   },
   filter: function filter(ary, predicate) {
-    var result = []
-    for (var i = 0; i < ary.length; i++) {
-      if (predicate(ary[i])) {
-        result.push(ary[i])
-      }
-    }
-    return result
+
   },
-  filter: function (collection, predicate) {
-    var temp = collection
-    predicate = this.iteratee(predicate)
-    for (var i = 0; i < temp.length; i++) {
-      if (!predicate(temp[i])) {
-        temp.splice(i, 1)
-        i--
-      }
-    }
-    return temp
-  },
+
   reduce: function reduce(ary, combine, start) {
     var result = start
     for (var i = 0; i < ary.length; i++) {
@@ -396,22 +379,9 @@ var baimingsong = {
     }
     return result
   },
-  sortBy: function sortBy() {
-
-  },
-  // uniq: function uniq(ary) {
-  //   var result = []
-  //   var obj = {}
-  //   for (var i = 0; i < ary.length; i++) {
-  //     if (!(obj[ary[i]]) == undefined) {
-  //       obj(ary[i])++
-  //       result.push(ary[i])
-  //     }
-  //   }
-  //   return result
-  // },
-  sample: function sample() {
-
+  sample: function sample(ary) {
+    var temp = Math.floor(Math.random() * (ary.length - 1))
+    return arr[temp]
   },
   isUndefined: function isUndefined(value) {
     return value === undefined
@@ -420,10 +390,10 @@ var baimingsong = {
     return value === null
   },
   isNil: function isNil(value) {
-    return null || undefined
+    return value == null || value == undefined
   },
   isNaN: function isNaN(value) {
-    return value === NaN
+    return this.isNumber(value) && value != +value
   },
   isNumber: function isNumber(value) {
     return typeof (value) === 'number'
@@ -485,42 +455,7 @@ var baimingsong = {
     return min
   },
 
-  maxBy: function maxBy(ary, iteratee) {
-    if (typeof iteratee == 'function') {
-      for (var i = 0; i < ary.length; i++) {
-        if (iteratee(i)) {
-          return ary[i]
-        }
-      }
-    }
-    if (typeof iteratee == 'string') {
-      for (var i = 0; i < ary.length; i++) {
-        var temp = ary[i]
-        for (var key in temp) {
-          if (iteratee == key)
-            return ary[i]
-        }
-      }
-    }
-  },
-  minBy: function minBy(ary, iteratee) {
-    if (typeof iteratee == 'function') {
-      for (var i = 0; i < ary.length; i++) {
-        if (iteratee(i)) {
-          return ary[i]
-        }
-      }
-    }
-    if (typeof iteratee == 'string') {
-      for (var i = 0; i < ary.length; i++) {
-        var temp = ary[i]
-        for (var key in temp) {
-          if (iteratee == key)
-            return ary[i]
-        }
-      }
-    }
-  },
+
   round: function round() {
 
   },
@@ -531,6 +466,139 @@ var baimingsong = {
   floor: function floor() {
 
   },
+  sortedIndexOf: function sortedIndexOf(ary, value) {
+    for (var i = 0; i < ary.length; i++) {
+      if (ary[i] == value) {
+        return i;
+      }
+    }
+    return -1;
+
+  },
+  sortedLastIndexOf: function sortedLastIndexOf(ary, value) {
+    for (var i = ary.length - 1; i >= 0; i--) {
+      if (ary[i] == value) {
+        return i
+      }
+    }
+    return -1
+  },
+  sortedLastIndex: function sortedLastIndex(ary, value) {
+    for (var i = ary.length - 1; i >= 0; i--) {
+      if (ary[i] == value) {
+        return i + 1
+      }
+    }
+    return -1
+  },
+  sortedUniq: function sortedUniq(ary) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (result.indexOf(ary[i]) == -1) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+  sortedUniqBy: function sortedUniqBy(ary, iteratee) {
+    var result = []
+    var temp = []
+    for (var i = 0; i < ary.length; i++) {
+      var a = ary[i]
+      if (temp.indexOf(iteratee(a)) == -1) {
+        temp.push(iteratee(a))
+        result.push(a)
+      }
+    }
+    return result
+  },
+  tail: function tail(ary) {
+    return ary.slice(1)
+
+  },
+  pullAll: function pullAll(ary, ...values) {
+    var result = []
+    values = values.flat(1)
+    for (var i = 0; i < ary.length; i++) {
+      if (!(values.includes(ary[i]))) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+  intersection: function intersection() {
+
+  },
+  take: function take(ary, n = 1) {
+    var result = []
+    if (n == 0) {
+      return result
+    }
+    if (n > ary.length) {
+      n = ary.length
+    }
+    for (var i = 0; i < n; i++) {
+      result.push(ary[i])
+    }
+    return result
+  },
+  takeRight: function takeRight(ary, n = 1) {
+    var result = []
+    if (n == 0) {
+      return result
+    }
+    var start = ary.length - n
+    if (start < 0) {
+      start = 0
+    }
+    for (var i = start; i < ary.length; i++) {
+      result.push(ary[i])
+    }
+    return result
+
+  },
+  union: function union(...array) {
+    var result = []
+    var ary = array.flat(1)
+    for (var i = 0; i < ary.length; i++) {
+      if (result.indexOf(ary[i]) == -1) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+  uniq: function uniq(ary) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (result.indexOf(ary[i]) == -1) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+  unzip: function unzip(array) {
+    var result = []
+    var temp = []
+    for (var i = 0; i < array[0].length; i++) {
+      for (var j = 0; j < array.length; j++) {
+        temp.push(array[j][i])
+      }
+      result.push(temp)
+      temp = []
+    }
+    return result
+  },
+  without: function without(ary, ...values) {
+    var result = []
+    for (var i = 0; i < ary.length; i++) {
+      if (values.indexOf(ary[i]) == -1) {
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+
+
 
 
 
