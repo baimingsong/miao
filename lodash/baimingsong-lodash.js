@@ -105,7 +105,8 @@ var baimingsong = {
     return ary
   },
 
-  findIndex: function findIndex(array, predicate = identity, fromIndex = 0) {
+
+  findIndex: function findIndex(array, predicate, fromIndex = 0) {
     if (Array.isArray(predicate)) {
       for (var i = fromIndex; i < array.length; i++) {
         for (var key in array[i]) {
@@ -175,6 +176,9 @@ var baimingsong = {
   },
 
   flattenDepth: function flattenDepth(ary, depth = 1) {
+    if (depth == 0) {
+      return ary
+    }
     var result = []
     for (var i = 0; i < ary.length; i++) {
       if (Array.isArray(ary[i]) && depth > 0) {
@@ -260,7 +264,7 @@ var baimingsong = {
 
   every: function every(ary, predicate) {
     for (var i = 0; i < ary.length; i++) {
-      if (predicate(ary[i], i, ary) == false) {
+      if (this.predicateIs(predicate)(ary[i], i, ary) == false) {
         return false
       }
     }
@@ -268,10 +272,9 @@ var baimingsong = {
   },
   some: function some(ary, predicate) {
     for (var i = 0; i < ary.length; i++) {
-      if (predicate(ary[i], i, ary) == true) {
+      if (this.predicateIs(predicate)(ary[i], i, ary) == true) {
         return true
       }
-
     }
     return false
   },
@@ -318,7 +321,12 @@ var baimingsong = {
     return result
   },
   filter: function filter(ary, predicate) {
-
+    for (var i = 0; i < ary.length; i++) {
+      if (this.predicateIs(predicate)(ary[i])) {
+        result.push(ary[i])
+      }
+    }
+    return result
   },
 
   reduce: function reduce(ary, combine, start) {
@@ -442,6 +450,24 @@ var baimingsong = {
     }
     return max
   },
+  maxBy: function maxBy(ary, iteratee) {
+
+    var max = 0
+    var maxIndex = 0
+    for (var i = 0; i < ary.length; i++) {
+      if (typeof iteratee == 'string') {
+        var num = ary[i][iteratee]
+      }
+      if (typeof iteratee == 'function') {
+        var num = iteratee(ary[i])
+      }
+      if (num > max) {
+        max = num
+        maxIndex = i
+      }
+    }
+    return ary[maxIndex]
+  },
   min: function min(ary) {
     if (ary.length == 0) {
       return undefined
@@ -453,6 +479,23 @@ var baimingsong = {
       }
     }
     return min
+  },
+  minBy: function minBy(ary, iteratee) {
+    var min = Infinity
+    var minIndex = 0
+    for (var i = 0; i < ary.length; i++) {
+      if (typeof iteratee == 'string') {
+        var num = ary[i][iteratee]
+      }
+      if (typeof iteratee == 'function') {
+        var num = iteratee(ary[i])
+      }
+      if (num < min) {
+        min = num
+        minIndex = i
+      }
+    }
+    return ary[minIndex]
   },
 
 
@@ -526,8 +569,25 @@ var baimingsong = {
     }
     return result
   },
-  intersection: function intersection() {
-
+  intersection: function intersection(...arrays) {
+    var result = []
+    var obj = {}
+    for (var i = 0; i < arrays.length; i++) {
+      for (var j = 0; j < arrays[i].length; j++) {
+        var temp = arrays[i][j]
+        if (!(temp in obj)) {
+          obj[temp] = 1
+        } else {
+          obj[temp]++
+        }
+      }
+    }
+    for (var key in obj) {
+      if (obj[key] == arrays.length) {
+        result.push(+key)
+      }
+    }
+    return result
   },
   take: function take(ary, n = 1) {
     var result = []
@@ -567,6 +627,26 @@ var baimingsong = {
     }
     return result
   },
+  unionBy: function unionBy(...ary) {
+    var result = []
+    var temp = []
+    var iteratee = ary[ary.length - 1] //
+    for (var i = 0; i < ary.length - 1; i++) { //
+      for (var j = 0; j < ary[i].length; j++) {
+        if (typeof iteratee == 'function') {
+          var num = iteratee(ary[i][j])
+        }
+        if (typeof iteratee == 'string') {
+          var num = ary[i][j][iteratee]
+        }
+        if (temp.indexOf(num) == -1) {
+          temp.push(num)
+          result.push(ary[i][j])
+        }
+      }
+    }
+    return result
+  },
   uniq: function uniq(ary) {
     var result = []
     for (var i = 0; i < ary.length; i++) {
@@ -576,7 +656,24 @@ var baimingsong = {
     }
     return result
   },
-  unzip: function unzip(array) {
+  uniqBy: function uniqBy(ary, iteratee) {
+    var result = []
+    var temp = []
+    for (var i = 0; i < ary.length; i++) {
+      if (typeof iteratee == 'function') {
+        var num = iteratee(ary[i])
+      }
+      if (typeof iteratee == 'string') {
+        var num = ary[i][iteratee]
+      }
+      if (temp.indexOf(num) == -1) {
+        temp.push(num)
+        result.push(ary[i])
+      }
+    }
+    return result
+  },
+  unzip: function unzip(...array) {
     var result = []
     var temp = []
     for (var i = 0; i < array[0].length; i++) {
@@ -597,6 +694,74 @@ var baimingsong = {
     }
     return result
   },
+
+  xor: function xor(...array) {
+    var result = []
+    var obj = {}
+    var ary = array.flat(1)
+    for (var i = 0; i < ary.length; i++) {
+      if (!(ary[i] in obj)) {
+        obj[ary[i]] = 1
+      } else {
+        obj[ary[i]]++
+      }
+    }
+    for (var key in obj) {
+      if (obj[key] == 1) {
+        result.push(+key)
+      }
+    }
+    return result
+  },
+
+  zip: function zip(...array) {
+    var result = []
+    var temp = []
+    for (var i = 0; i < array[0].length; i++) {
+      for (var j = 0; j < array.length; j++) {
+        temp.push(array[j][i])
+      }
+      result.push(temp)
+      temp = []
+    }
+    return result
+  },
+  predicateIs: function predicateIs(predicate) {
+    if (typeof (predicate) === 'function') {
+      return predicate
+    }
+    if (typeof (predicate) === 'object') { // 对象和数组时
+      if (Array.isArray(predicate)) {
+        return function (collection) {
+          var [key, val] = predicate
+          return collection[key] === val
+        }
+      } else {
+        return function (collection) {
+          for (var key in predicate) {
+            if (collection[key] !== predicate[key]) {
+              return false
+            }
+          }
+          return true
+        }
+      }
+    }
+    if (typeof (predicate) === 'string') {
+      return function (collection) {
+        var key = predicate
+        return collection[key]
+      }
+    }
+  },
+  find: function find(collection, predicate, fromIndex = 0) {
+
+  },
+
+
+
+
+
 
 
 
