@@ -675,13 +675,11 @@ var baimingsong = {
   },
   unzip: function unzip(...array) {
     var result = []
-    var temp = []
     for (var i = 0; i < array[0].length; i++) {
       for (var j = 0; j < array.length; j++) {
         temp.push(array[j][i])
       }
       result.push(temp)
-      temp = []
     }
     return result
   },
