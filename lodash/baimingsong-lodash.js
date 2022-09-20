@@ -150,10 +150,47 @@ var baimingsong = {
   },
 
 
+  findLastIndex: function findLastIndex(array, predicate, fromIndex = array.length - 1) {
+    if (typeof predicate === 'function') {
+      for (var i = fromIndex; i >= 0; i--) {
+        if (predicate(array[i])) {
+          return i
+        }
+      }
+    }
+    if (typeof predicate === 'object') {
+      for (var i = fromIndex; i >= 0; i--) {
+        var flag = true
+        for (var key in predicate) {
+          if (key in array[i] && predicate[key] === array[i][key]) {
+            continue
+          } else {
+            flag = false
+          }
+        }
+        if (flag === true) {
+          return i
+        }
+      }
+    }
 
-
-  findLastIndex: function findLastIndex() {
-
+    if (typeof predicate === 'string') {
+      for (var i = fromIndex; i >= 0; i--) {
+        if (array[i][predicate] === true) {
+          return i
+        }
+      }
+    }
+    if (Array.isArray(predicate)) {
+      for (var i = fromIndex; i >= 0; i--) {
+        for (var key in array[i]) {
+          if (key === predicate[0] && array[i][key] === predicate[1]) {
+            return i
+          }
+        }
+      }
+    }
+    return -1
   },
 
   flatten: function flatten(ary) {
@@ -321,12 +358,77 @@ var baimingsong = {
     return result
   },
   filter: function filter(ary, predicate) {
+    var result = []
     for (var i = 0; i < ary.length; i++) {
-      if (this.predicateIs(predicate)(ary[i])) {
-        result.push(ary[i])
+      if (typeof predicate === 'function') {
+        if (predicate(ary[i])) {
+          result.push(ary[i])
+        }
       }
+      if (typeof predicate === 'object') {
+        var flag = true
+        for (var key in predicate) {
+          if (key in ary[i] && ary[i][key] === predicate[key]) {
+            continue
+          } else {
+            flag = false
+          }
+        }
+        if (flag) {
+          result.push(ary[i])
+        }
+      }
+      if (typeof predicate === 'string') {
+        if (ary[i][predicate]) {
+          result.push(ary[i])
+        }
+      }
+      if (Array.isArray(predicate)) {
+        for (var key in ary[i]) {
+          if (key == predicate[0] && ary[i][key] == predicate[1]) {
+            result.push(ary[i])
+          }
+        }
+      }
+
     }
     return result
+  },
+  find: function find(ary, predicate, fromIndex = 0) {
+    var l = ary.length
+    for (var i = fromIndex; i < l; i++) {
+      if (typeof predicate === 'function') {
+        if (predicate(ary[i])) {
+          return ary[i]
+        }
+      }
+      if (typeof predicate === 'object') {
+        var flag = true
+        for (var key in predicate) {
+          if (ary[i][key] === predicate[key]) {
+            continue
+          } else {
+            flag = false
+          }
+        }
+        if (flag) {
+          return ary[i]
+        }
+      }
+      if (Array.isArray(predicate)) {
+        for (var key in ary[i]) {
+          if (key === predicate[0] && ary[i][key] === predicate[1]) {
+            return ary[i]
+          }
+        }
+      }
+      if (typeof predicate === 'string') {
+        if (ary[i][predicate]) {
+          return ary[i]
+        }
+      }
+    }
+    return undefined
   },
 
   reduce: function reduce(ary, combine, start) {
@@ -427,11 +529,16 @@ var baimingsong = {
         step = -1
       }
     }
-    if (step >= 0) {
+    if (step > 0) {
       for (i = start; i < end; i += step) {
         result.push(i)
       }
-    } else {
+    } else if (step == 0) {
+      for (i = start; i < end; i++) {
+        result.push(start)
+      }
+    }
+    else {
       for (i = start; i > end; i += step) {
         result.push(i)
       }
@@ -502,6 +609,7 @@ var baimingsong = {
   round: function round() {
 
   },
+
 
   ceil: function ceil() {
 
@@ -675,6 +783,7 @@ var baimingsong = {
   },
   unzip: function unzip(...array) {
     var result = []
+    var temp = []
     for (var i = 0; i < array[0].length; i++) {
       for (var j = 0; j < array.length; j++) {
         temp.push(array[j][i])
@@ -752,9 +861,38 @@ var baimingsong = {
       }
     }
   },
-  find: function find(collection, predicate, fromIndex = 0) {
+
+  defer: function defer(func, ...args) {
 
   },
+  sumBy: function sumBy(array, iteratee) {
+    var sum = 0
+    for (var i = 0; i < array.length; i++) {
+      if (typeof iteratee === 'function') {
+        sum += iteratee(array[i])
+      }
+      if (typeof iteratee === 'string') {
+        sum += array[i][iteratee]
+      }
+    }
+    return sum
+  },
+  toArray: function toArray(value) {
+    var result = []
+    if (typeof value === 'object') {
+      for (var key in value) {
+        result.push(value[key])
+      }
+      return result
+    }
+    if (typeof value === 'string') {
+      return value.split('')
+    }
+    if (typeof value === 'number' || value == null) {
+      return []
+    }
+  },
+
 
 
 
