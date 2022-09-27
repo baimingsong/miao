@@ -453,7 +453,34 @@ var baimingsong = {
       }
     }
   },
-
+  sortedIndexBy: function sortedIndexBy(ary, value, iteratee) {
+    for (var i = 0; i < ary.length; i++) {
+      if (typeof iteratee === 'function') {
+        if (iteratee(value) <= iteratee(ary[i])) {
+          return i
+        }
+      }
+      if (typeof iteratee === 'string') {
+        if (value[iteratee] <= ary[i][iteratee]) {
+          return i
+        }
+      }
+    }
+  },
+  sortedLastIndexBy: function sortedLastIndexBy(ary, value, iteratee) {
+    for (var i = ary.length - 1; i >= 0; i--) {
+      if (typeof iteratee === 'function') {
+        if (iteratee(value) >= iteratee(ary[i])) {
+          return i
+        }
+      }
+      if (typeof iteratee === 'string') {
+        if (value[iteratee] >= ary[i][iteratee]) {
+          return i
+        }
+      }
+    }
+  },
   size: function size(collection) {
     if (Array.isArray(collection)) {
       return collection.length
@@ -697,6 +724,37 @@ var baimingsong = {
     }
     return result
   },
+  intersectionBy: function intersectionBy(...ary) {
+    var iteratee = ary[ary.length - 1]
+    var result = []
+    var temp = []
+    for (var i = 0; i < ary.length - 1; i++) {
+      var temp1 = []
+      for (var j = 0; j < ary[i].length; j++) {
+        if (typeof iteratee == 'function') {
+          var num = iteratee(ary[i][j])
+          temp1.push(num)
+        }
+        if (typeof iteratee == 'string') {
+          var num = ary[i][j][iteratee]
+          temp1.push(num)
+        }
+      }
+      temp.push(temp1)
+    }
+    for (var i = 0; i < temp[0].length; i++) {
+      for (var j = 1; j < temp.length; j++) {
+        if (!temp[j].includes(temp[0][i])) {
+          break
+        }
+        if (j = temp.length - 1) {
+          result.push(ary[0][i])
+        }
+      }
+    }
+    return result
+  },
+
   take: function take(ary, n = 1) {
     var result = []
     if (n == 0) {
@@ -755,6 +813,7 @@ var baimingsong = {
     }
     return result
   },
+
   uniq: function uniq(ary) {
     var result = []
     for (var i = 0; i < ary.length; i++) {
@@ -789,6 +848,7 @@ var baimingsong = {
         temp.push(array[j][i])
       }
       result.push(temp)
+      temp = []
     }
     return result
   },
@@ -865,6 +925,13 @@ var baimingsong = {
   defer: function defer(func, ...args) {
 
   },
+  sum: function sum(ary) {
+    var sum = 0
+    for (var i = 0; i < ary.length; i++) {
+      sum += ary[i]
+    }
+    return sum
+  },
   sumBy: function sumBy(array, iteratee) {
     var sum = 0
     for (var i = 0; i < array.length; i++) {
@@ -892,9 +959,68 @@ var baimingsong = {
       return []
     }
   },
+  concat: function concat(ary, ...values) {
+    var value = values.flat(1)
+    for (var i = 0; i < value.length; i++) {
+      ary.push(value[i])
+    }
+    return ary
+  },
+  groupBy: function groupBy(ary, iteratee) {
+    var obj = {}
+    for (var i = 0; i < ary.length; i++) {
+      if (typeof iteratee === 'function') {
+        var key = iteratee(ary[i])
+        if (obj[key] === undefined) {
+          obj[key] = [[ary[i]]]
+        } else {
+          obj[key].push([[ary[i]]])
+        }
+      }
+      if (typeof iteratee === 'string') {
+        var key = ary[i][iteratee]
+        if (obj[key] === undefined) {
+          obj[key] = [[ary[i]]]
+        } else {
+          obj[key].push([[ary[i]]])
+        }
+      }
+    }
+    return obj
+  },
+
+  // sortBy: function sortBy(ary, iteratee) {
+
+  //   var result = []
+  //   var result1Age = []
+  //   if (Array.isArray(iteratee)) {
+  //     var result1 = []
+  //     for (var i = 0; i < ary.length; i++) {
+  //       var temp = []
+  //       var a = iteratee[0]
+  //       var b = iteratee[1]
+  //       temp.push(ary[i][a])
+  //       temp.push(ary[i][b])
+  //       result1.push(temp)
+  //       result1Age.push([result1[i][1]])
+  //     }
+
+  //     result = result1
+  //   }
 
 
+  //   // if (typeof iteratee === 'function') {
+  //   //   var c = iteratee(ary[i])
 
+  //   // }
+  //   return result
+
+  // },
+
+
+  keyBy: function keyBy() {
+
+  }
 
 
 
