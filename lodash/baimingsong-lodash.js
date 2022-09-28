@@ -350,10 +350,20 @@ var baimingsong = {
     }
     return collection
   },
-  map: function map(ary, transform) {
+  map: function map(collection, iteratee) {
     var result = []
-    for (var i = 0; i < ary.length; i++) {
-      result.push(transform(ary[i]))
+    if (typeof iteratee === 'function') {
+      if (typeof collection === 'object') {
+        for (var key in collection) {
+          result.push(iteratee(collection[key]))
+        }
+      }
+    }
+    if (typeof iteratee === 'string') {
+      for (var i = 0; i < collection.length; i++) {
+        var temp = collection[i][iteratee]
+        result.push(temp)
+      }
     }
     return result
   },
@@ -429,6 +439,9 @@ var baimingsong = {
       }
     }
     return undefined
+  },
+  flatMap: function flatMap() {
+
   },
 
   reduce: function reduce(ary, combine, start) {
@@ -844,7 +857,7 @@ var baimingsong = {
   unzip: function unzip(...array) {
     var result = []
     for (var i = 0; i < array[0].length; i++) {
-      temp = []
+      var temp = []
       for (var j = 0; j < array.length; j++) {
         temp.push(array[j][i])
       }
@@ -990,7 +1003,6 @@ var baimingsong = {
   },
 
   // sortBy: function sortBy(ary, iteratee) {
-
   //   var result = []
   //   var result1Age = []
   //   if (Array.isArray(iteratee)) {
@@ -1002,12 +1014,14 @@ var baimingsong = {
   //       temp.push(ary[i][a])
   //       temp.push(ary[i][b])
   //       result1.push(temp)
-  //       result1Age.push([result1[i][1]])
   //     }
-
   //     result = result1
   //   }
-
+  //   var resultAge = []
+  //   for (var i = 0; i < result.length; i++) {
+  //     resultAge.push(result[i][1])
+  //   }
+  //   resultAge.sort((a, b) => (a - b))
 
   //   // if (typeof iteratee === 'function') {
   //   //   var c = iteratee(ary[i])
@@ -1018,9 +1032,76 @@ var baimingsong = {
   // },
 
 
-  keyBy: function keyBy() {
+  keyBy: function keyBy(ary, iteratee) {
+    var obj = {}
+    for (var i = 0; i < ary.length; i++) {
+      if (typeof iteratee === 'function') {
+        var temp = iteratee(ary[i])
+        if (obj[temp] === undefined) {
+          obj[temp] = ary[i]
+        }
+      }
+      if (typeof iteratee === 'string') {
+        var temp = ary[i][iteratee]
+        if (obj[temp] === undefined) {
+          obj[temp] = ary[i]
+        }
+      }
+    }
+    return obj
+  },
 
-  }
+  partition: function partition(ary, predicate) {
+    var result = []
+    var truthyAry = []
+    var falseAry = []
+
+    for (var i = 0; i < ary.length; i++) {
+      if (typeof predicate === 'function') {
+        if (predicate(ary[i]) == true) {
+          truthyAry.push(ary[i])
+        }
+        if (predicate(ary[i]) == false) {
+          falseAry.push(ary[i])
+        }
+      }
+
+      if (typeof predicate === 'object') {
+        var flag = true
+        for (var key in predicate) {
+
+          if ((key in ary[i]) && predicate[key] == ary[i][key]) {
+            continue
+          } else {
+            flag = false
+          }
+        }
+        if (flag) {
+          truthyAry.push(ary[i])
+        } else {
+          falseAry.push(ary[i])
+        }
+
+      }
+      if (Array.isArray(predicate)) {
+        if (ary[i][predicate[0]] == predicate[1]) {
+          truthyAry.push(ary[i])
+        } else {
+          falseAry.push(ary[i])
+        }
+      }
+      if (typeof predicate === 'string') {
+        if (ary[i][predicate]) {
+          truthyAry.push(ary[i])
+        } else {
+          falseAry.push(ary[i])
+        }
+      }
+    }
+    result.push(truthyAry)
+    result.push(falseAry)
+    return result
+  },
 
 
 
