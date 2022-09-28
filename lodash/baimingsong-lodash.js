@@ -470,16 +470,17 @@ var baimingsong = {
   sortedLastIndexBy: function sortedLastIndexBy(ary, value, iteratee) {
     for (var i = ary.length - 1; i >= 0; i--) {
       if (typeof iteratee === 'function') {
-        if (iteratee(value) >= iteratee(ary[i])) {
-          return i
+        if (iteratee(value) == iteratee(ary[i])) {
+          return i + 1
         }
       }
       if (typeof iteratee === 'string') {
-        if (value[iteratee] >= ary[i][iteratee]) {
-          return i
+        if (value[iteratee] == ary[i][iteratee]) {
+          return i + 1
         }
       }
     }
+    return -1
   },
   size: function size(collection) {
     if (Array.isArray(collection)) {
@@ -842,13 +843,12 @@ var baimingsong = {
   },
   unzip: function unzip(...array) {
     var result = []
-    var temp = []
     for (var i = 0; i < array[0].length; i++) {
+      temp = []
       for (var j = 0; j < array.length; j++) {
         temp.push(array[j][i])
       }
       result.push(temp)
-      temp = []
     }
     return result
   },
@@ -972,17 +972,17 @@ var baimingsong = {
       if (typeof iteratee === 'function') {
         var key = iteratee(ary[i])
         if (obj[key] === undefined) {
-          obj[key] = [[ary[i]]]
+          obj[key] = [ary[i]]
         } else {
-          obj[key].push([[ary[i]]])
+          obj[key].push(ary[i])
         }
       }
       if (typeof iteratee === 'string') {
         var key = ary[i][iteratee]
         if (obj[key] === undefined) {
-          obj[key] = [[ary[i]]]
+          obj[key] = [ary[i]]
         } else {
-          obj[key].push([[ary[i]]])
+          obj[key].push(ary[i])
         }
       }
     }
