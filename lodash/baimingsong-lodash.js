@@ -444,13 +444,28 @@ var baimingsong = {
 
   },
 
-  reduce: function reduce(ary, combine, start) {
-    var result = start
-    for (var i = 0; i < ary.length; i++) {
-      result = combine(result, ary[i])
+  reduce: function reduce(collection, iteratee, accumulator) {
+    var start = 0
+    if (accumulator == undefined) {
+      accumulator = collection[0]
+      start = 1
     }
-    return result
+
+    if (Array.isArray(collection)) {
+      for (var i = start; i < collection.length; i++) {
+        accumulator = iteratee(accumulator, collection[i], i, collection)
+      }
+    } else {
+      for (var key in collection) {
+        accumulator = iteratee(accumulator, collection[key], key)
+      }
+    }
+
+    return accumulator
   },
+
+
+
   nth: function nth(ary, n) {
     if (n >= 0) {
       return ary[n]
@@ -1057,6 +1072,7 @@ var baimingsong = {
     var falseAry = []
 
     for (var i = 0; i < ary.length; i++) {
+      ``
       if (typeof predicate === 'function') {
         if (predicate(ary[i]) == true) {
           truthyAry.push(ary[i])
@@ -1064,9 +1080,7 @@ var baimingsong = {
         if (predicate(ary[i]) == false) {
           falseAry.push(ary[i])
         }
-      }
-
-      if (typeof predicate === 'object') {
+      } else if (typeof predicate === 'object') {
         var flag = true
         for (var key in predicate) {
 
@@ -1082,15 +1096,13 @@ var baimingsong = {
           falseAry.push(ary[i])
         }
 
-      }
-      if (Array.isArray(predicate)) {
+      } else if (Array.isArray(predicate)) {
         if (ary[i][predicate[0]] == predicate[1]) {
           truthyAry.push(ary[i])
         } else {
           falseAry.push(ary[i])
         }
-      }
-      if (typeof predicate === 'string') {
+      } else if (typeof predicate === 'string') {
         if (ary[i][predicate]) {
           truthyAry.push(ary[i])
         } else {
